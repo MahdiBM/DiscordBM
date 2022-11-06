@@ -233,7 +233,7 @@ public actor BotGatewayManager: GatewayManager {
             self.configureWebSocket()
         }.whenFailure { [self] error in
             logger.error("WebSocket error while connecting to Discord", metadata: [
-                "error": .string("\(error)")
+                "error": "\(error)"
             ])
             self._state.store(.noConnection, ordering: .relaxed)
             Task {
@@ -250,6 +250,12 @@ public actor BotGatewayManager: GatewayManager {
             opcode: .requestGuildMembers,
             data: .requestGuildMembers(payload)
         ), opcode: 1)
+    }
+    
+    func addEventHandler<T>(for keyPath: KeyPath<Gateway.Event.Payload, T>) {
+//        let keyPath = keyPath as PartialKeyPath
+        let event = Gateway.Event.init(opcode: .dispatch)
+        event.data?[keyPath: keyPath]
     }
     
     /// Adds a handler to be notified of events.

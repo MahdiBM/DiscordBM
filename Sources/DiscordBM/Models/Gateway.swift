@@ -44,7 +44,7 @@ public struct Gateway: Sendable, Codable {
             case identify(Identify)
             case hello(Hello)
             case ready(Ready)
-            /// Is sent when we want to send a resume request
+            /// Is used when we want to send a resume request
             case resume(Resume)
             /// Is received when Discord has ended replying our lost events, after a resume
             /// https://discord.com/developers/docs/topics/gateway-events#resumed
