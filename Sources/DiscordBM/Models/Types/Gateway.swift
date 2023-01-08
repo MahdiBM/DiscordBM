@@ -436,24 +436,25 @@ public struct Gateway: Sendable, Codable {
         
         public var token: Secret
         public var properties = ConnectionProperties()
+        /// DiscordBM supports the better `Transport Compression`, but not `Payload Compression`.
+        /// Setting this to `true` will only cause problems.
+        /// Instead, use the `compression` parameter in the `BotGatewayManager` initializer.
         public var compress: Bool?
         public var large_threshold: Int?
         public var shard: IntPair?
         public var presence: Presence?
         public var intents: IntBitField<Intent>
         
-        public init(token: Secret, compress: Bool? = nil, large_threshold: Int? = nil, shard: IntPair? = nil, presence: Presence? = nil, intents: [Intent]) {
+        public init(token: Secret, large_threshold: Int? = nil, shard: IntPair? = nil, presence: Presence? = nil, intents: [Intent]) {
             self.token = token
-            self.compress = compress
             self.large_threshold = large_threshold
             self.shard = shard
             self.presence = presence
             self.intents = .init(intents)
         }
         
-        public init(token: String, compress: Bool? = nil, large_threshold: Int? = nil, shard: IntPair? = nil, presence: Presence? = nil, intents: [Intent]) {
+        public init(token: String, large_threshold: Int? = nil, shard: IntPair? = nil, presence: Presence? = nil, intents: [Intent]) {
             self.token = Secret(token)
-            self.compress = compress
             self.large_threshold = large_threshold
             self.shard = shard
             self.presence = presence
@@ -544,6 +545,7 @@ public struct Gateway: Sendable, Codable {
         public var bitrate: Int?
         public var user_limit: Int?
         public var rate_limit_per_user: Int?
+        public var default_forum_layout: Int?
         public var recipients: [DiscordUser]?
         public var icon: String?
         public var owner_id: String?
@@ -668,6 +670,7 @@ public struct Gateway: Sendable, Codable {
         public var system_channel_id: String?
         public var system_channel_flags: IntBitField<Guild.SystemChannelFlag>
         public var rules_channel_id: String?
+        public var safety_alerts_channel_id: String?
         public var max_presences: Int?
         public var max_members: Int?
         public var vanity_url_code: String?
@@ -1054,6 +1057,7 @@ public struct Gateway: Sendable, Codable {
         public var channel_id: String
         public var guild_id: String?
         public var message_id: String
+        public var burst: Bool?
         public var emoji: PartialEmoji
     }
     
@@ -1077,6 +1081,11 @@ public struct Gateway: Sendable, Codable {
         public var platform: String?
         public var timestamps: Activity.Timestamps?
         public var application_id: String?
+        public var assets: Activity.Assets?
+        public var party: Activity.Party?
+        public var details: String?
+        public var sync_id: String?
+        public var flags: IntBitField<Activity.Flag>?
     }
     
     /// https://discord.com/developers/docs/topics/gateway-events#presence-update-presence-update-event-fields
